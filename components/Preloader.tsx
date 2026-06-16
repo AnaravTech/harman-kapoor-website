@@ -160,12 +160,13 @@ function MonogramLetters({ phase }: { phase: number }) {
               fontWeight: 900,
               lineHeight: 1,
               letterSpacing: "-0.05em",
-              background: phase >= i + 1
+              backgroundImage: phase >= i + 1
                 ? "linear-gradient(160deg, #F5E4A8 0%, #D4AF37 40%, #C9A84C 70%, #E8C96A 100%)"
-                : "transparent",
-              WebkitBackgroundClip: "text",
+                : undefined,
+              WebkitBackgroundClip: phase >= i + 1 ? "text" : undefined,
               WebkitTextFillColor: phase >= i + 1 ? "transparent" : "rgba(212,175,55,0.1)",
-              backgroundClip: "text",
+              backgroundClip: phase >= i + 1 ? "text" : undefined,
+              color: phase >= i + 1 ? undefined : "rgba(212,175,55,0.1)",
               display: "block",
               textShadow: phase >= i + 1 ? "0 0 80px rgba(212,175,55,0.3)" : "none",
             }}

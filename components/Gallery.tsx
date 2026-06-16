@@ -152,6 +152,7 @@ export default function Gallery() {
                   src={item.src}
                   alt={item.alt}
                   fill
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                   style={{ objectFit: "cover", transition: "transform 0.5s ease" }}
                   onMouseEnter={(e) => { (e.target as HTMLElement).style.transform = "scale(1.05)"; }}
                   onMouseLeave={(e) => { (e.target as HTMLElement).style.transform = "scale(1)"; }}

@@ -62,13 +62,12 @@ export default function About() {
             animate={inView ? "visible" : "hidden"}
             style={{ position: "relative" }}
           >
-            {/* Gold frame accent */}
             <div style={{
               position: "absolute",
-              top: "-1.5rem",
-              left: "-1.5rem",
-              right: "1.5rem",
-              bottom: "1.5rem",
+              top: "-1rem",
+              left: "-1rem",
+              right: "-1rem",
+              bottom: "-1rem",
               border: "1px solid rgba(212,175,55,0.25)",
               borderRadius: "16px",
               zIndex: 0,
@@ -84,6 +83,7 @@ export default function About() {
                 src="/images/harman-closeup.png"
                 alt="Harman Singh Kapoor — UK Entrepreneur & Public Speaker"
                 fill
+                sizes="(max-width: 768px) 100vw, 50vw"
                 style={{ objectFit: "cover", objectPosition: "center top" }}
                 quality={90}
               />

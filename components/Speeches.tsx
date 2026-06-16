@@ -2,6 +2,7 @@
 
 import { useRef, useState } from "react";
 import { motion, useInView } from "framer-motion";
+import Image from "next/image";
 import { Play, MapPin, Calendar, Tag } from "lucide-react";
 import { speeches } from "@/data/speeches";
 
@@ -95,10 +96,12 @@ export default function Speeches() {
                   <>
                     {/* Harman portrait thumbnail */}
                     <div style={{ position: "absolute", inset: 0, overflow: "hidden" }}>
-                      <img
+                      <Image
                         src={i % 2 === 0 ? "/images/harman-speech.png" : "/images/harman-hero.png"}
                         alt={speech.title}
-                        style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center top", filter: "brightness(0.55) saturate(0.7)" }}
+                        fill
+                        sizes="(max-width: 768px) 100vw, 350px"
+                        style={{ objectFit: "cover", objectPosition: "center top", filter: "brightness(0.55) saturate(0.7)" }}
                       />
                     </div>
 

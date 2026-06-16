@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronDown, Play, Newspaper, Mic } from "lucide-react";
+import { ChevronDown, Play, Mic } from "lucide-react";
 import Image from "next/image";
 import dynamic from "next/dynamic";
 
@@ -14,47 +14,6 @@ const heroImages = [
   { src: "/images/harman-london.png", label: "Londoner" },
   { src: "/images/harman-restaurant.png", label: "Restaurateur" },
 ];
-
-const CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%&";
-
-function ScrambleText({ text, delay = 0 }: { text: string; delay?: number }) {
-  const [displayed, setDisplayed] = useState(text);
-  const [done, setDone] = useState(false);
-  const refTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  useEffect(() => {
-    let iterations = 0;
-    const maxIter = text.length * 5;
-
-    refTimer.current = setTimeout(() => {
-      const interval = setInterval(() => {
-        setDisplayed(
-          text
-            .split("")
-            .map((char, i) => {
-              if (char === " ") return " ";
-              if (i < Math.floor(iterations / 5)) return char;
-              return CHARS[Math.floor(Math.random() * CHARS.length)];
-            })
-            .join("")
-        );
-        iterations++;
-        if (iterations >= maxIter) {
-          clearInterval(interval);
-          setDisplayed(text);
-          setDone(true);
-        }
-      }, 40);
-      return () => clearInterval(interval);
-    }, delay);
-
-    return () => {
-      if (refTimer.current) clearTimeout(refTimer.current);
-    };
-  }, [text, delay]);
-
-  return <span style={{ fontVariantNumeric: "tabular-nums" }}>{displayed}</span>;
-}
 
 function CountUp({ end, suffix = "", delay = 0 }: { end: number; suffix?: string; delay?: number }) {
   const [count, setCount] = useState(0);
@@ -87,7 +46,6 @@ export default function Hero() {
   const [scrollY, setScrollY] = useState(0);
   const heroRef = useRef<HTMLElement>(null);
   const [mousePos, setMousePos] = useState({ x: 0.5, y: 0.5 });
-  const [loaded, setLoaded] = useState(false);
 
   // Rotate background images
   useEffect(() => {
@@ -113,7 +71,6 @@ export default function Hero() {
       });
     };
     window.addEventListener("mousemove", onMove, { passive: true });
-    setTimeout(() => setLoaded(true), 100);
     return () => window.removeEventListener("mousemove", onMove);
   }, []);
 
@@ -151,10 +108,11 @@ export default function Hero() {
               src={img.src}
               alt={img.label}
               fill
+              sizes="100vw"
               priority={i === 0}
               quality={90}
               style={{
-                objectFit: "cover",
+                objectFit: "contain",
                 objectPosition: "center top",
                 transform: `scale(1.08) translate(${parallaxX * -0.3}px, ${(parallaxY * -0.3) + scrollY * -0.2}px)`,
                 transition: "transform 0.1s linear",
@@ -269,6 +227,7 @@ export default function Hero() {
               src="/images/harman-closeup.png"
               alt="Harman Singh Kapoor"
               fill
+              sizes="(max-width: 900px) 0px, (max-width: 1200px) 35vw, 520px"
               priority
               quality={95}
               style={{
@@ -374,64 +333,22 @@ export default function Hero() {
         flexDirection: "column",
         justifyContent: "center",
         paddingRight: "clamp(2rem, 42vw, 640px)",
-        marginTop: "-2rem",
+        marginTop: "80px",
       }}
         className="hero-content"
       >
-        {/* Top label */}
-        <motion.div
-          initial={{ opacity: 0, x: -30 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.8, delay: 0.8 }}
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "1rem",
-            marginBottom: "2rem",
-          }}
-        >
-          <div style={{
-            width: "2.5rem", height: "1px",
-            background: "#D4AF37",
-          }} />
-          <span style={{
-            fontFamily: "'Inter', sans-serif",
-            fontSize: "0.65rem",
-            fontWeight: 700,
-            letterSpacing: "0.25em",
-            textTransform: "uppercase",
-            color: "rgba(212,175,55,0.9)",
-          }}>
-            Harman Singh Kapoor
-          </span>
-          <div style={{
-            padding: "0.15rem 0.6rem",
-            background: "rgba(212,175,55,0.12)",
-            border: "1px solid rgba(212,175,55,0.25)",
-            borderRadius: "2px",
-            fontFamily: "'Inter', sans-serif",
-            fontSize: "0.55rem",
-            fontWeight: 700,
-            letterSpacing: "0.15em",
-            textTransform: "uppercase",
-            color: "rgba(212,175,55,0.6)",
-          }}>
-            London, UK
-          </div>
-        </motion.div>
-
         {/* Giant Headline — character by character reveal */}
-        <div style={{ overflow: "hidden", marginBottom: "0.5rem" }}>
+        <div style={{ overflow: "hidden", padding: "0.08em 0 0.1em", marginBottom: "clamp(0.1rem, 0.5vh, 0.35rem)" }}>
           <motion.h1
             initial={{ y: "100%" }}
             animate={{ y: 0 }}
             transition={{ duration: 1, delay: 1, ease: [0.76, 0, 0.24, 1] }}
             style={{
               fontFamily: "'Playfair Display', serif",
-              fontSize: "clamp(2.8rem, 6.5vw, 6rem)",
+              fontSize: "clamp(2rem, 4vw, 3.8rem)",
               fontWeight: 900,
-              lineHeight: 1,
-              letterSpacing: "-0.03em",
+              lineHeight: 1.06,
+              letterSpacing: 0,
               color: "#F0EDE6",
               marginBottom: "0.3rem",
             }}
@@ -440,17 +357,17 @@ export default function Hero() {
           </motion.h1>
         </div>
 
-        <div style={{ overflow: "hidden", marginBottom: "0.5rem" }}>
+        <div style={{ overflow: "hidden", padding: "0.08em 0 0.1em", marginBottom: "clamp(0.1rem, 0.5vh, 0.35rem)" }}>
           <motion.h1
             initial={{ y: "100%" }}
             animate={{ y: 0 }}
             transition={{ duration: 1, delay: 1.15, ease: [0.76, 0, 0.24, 1] }}
             style={{
               fontFamily: "'Playfair Display', serif",
-              fontSize: "clamp(2.8rem, 6.5vw, 6rem)",
+              fontSize: "clamp(2rem, 4vw, 3.8rem)",
               fontWeight: 900,
-              lineHeight: 1,
-              letterSpacing: "-0.03em",
+              lineHeight: 1.06,
+              letterSpacing: 0,
               fontStyle: "italic",
               background: "linear-gradient(135deg, #C9A84C 0%, #F5E4A8 45%, #D4AF37 100%)",
               WebkitBackgroundClip: "text",
@@ -463,17 +380,17 @@ export default function Hero() {
           </motion.h1>
         </div>
 
-        <div style={{ overflow: "hidden", marginBottom: "0.5rem" }}>
+        <div style={{ overflow: "hidden", padding: "0.08em 0 0.1em", marginBottom: "clamp(0.1rem, 0.5vh, 0.35rem)" }}>
           <motion.h1
             initial={{ y: "100%" }}
             animate={{ y: 0 }}
             transition={{ duration: 1, delay: 1.3, ease: [0.76, 0, 0.24, 1] }}
             style={{
               fontFamily: "'Playfair Display', serif",
-              fontSize: "clamp(2.8rem, 6.5vw, 6rem)",
+              fontSize: "clamp(2rem, 4vw, 3.8rem)",
               fontWeight: 900,
-              lineHeight: 1,
-              letterSpacing: "-0.03em",
+              lineHeight: 1.06,
+              letterSpacing: 0,
               color: "#F0EDE6",
               marginBottom: "0.3rem",
             }}
@@ -482,17 +399,17 @@ export default function Hero() {
           </motion.h1>
         </div>
 
-        <div style={{ overflow: "hidden", marginBottom: "2rem" }}>
+        <div style={{ overflow: "hidden", padding: "0.08em 0 0.1em", marginBottom: "clamp(0.6rem, 1.5vh, 1.2rem)" }}>
           <motion.h1
             initial={{ y: "100%" }}
             animate={{ y: 0 }}
             transition={{ duration: 1, delay: 1.45, ease: [0.76, 0, 0.24, 1] }}
             style={{
               fontFamily: "'Playfair Display', serif",
-              fontSize: "clamp(2.8rem, 6.5vw, 6rem)",
+              fontSize: "clamp(2rem, 4vw, 3.8rem)",
               fontWeight: 900,
-              lineHeight: 1,
-              letterSpacing: "-0.03em",
+              lineHeight: 1.06,
+              letterSpacing: 0,
               fontStyle: "italic",
               background: "linear-gradient(135deg, #C9A84C 0%, #F5E4A8 45%, #D4AF37 100%)",
               WebkitBackgroundClip: "text",
@@ -516,7 +433,7 @@ export default function Hero() {
             color: "rgba(240,237,230,0.6)",
             lineHeight: 1.8,
             maxWidth: "480px",
-            marginBottom: "2.5rem",
+            marginBottom: "clamp(1rem, 2.5vh, 1.8rem)",
             letterSpacing: "0.01em",
           }}
         >
@@ -532,7 +449,7 @@ export default function Hero() {
             display: "flex",
             gap: "0.875rem",
             flexWrap: "wrap",
-            marginBottom: "3rem",
+            marginBottom: "clamp(1.2rem, 3vh, 2rem)",
           }}
         >
           {/* Primary CTA */}
@@ -609,43 +526,6 @@ export default function Hero() {
           >
             <Mic size={13} />
             Latest Speeches
-          </button>
-
-          <button
-            id="hero-media"
-            onClick={() => document.querySelector("#press")?.scrollIntoView({ behavior: "smooth" })}
-            data-magnetic
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: "0.6rem",
-              padding: "0.95rem 1.75rem",
-              background: "rgba(255,255,255,0.04)",
-              border: "1px solid rgba(255,255,255,0.1)",
-              borderRadius: "3px",
-              color: "rgba(240,237,230,0.5)",
-              fontFamily: "'Inter', sans-serif",
-              fontSize: "0.72rem",
-              fontWeight: 600,
-              letterSpacing: "0.12em",
-              textTransform: "uppercase",
-              cursor: "none",
-              transition: "all 0.3s ease",
-              backdropFilter: "blur(8px)",
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.borderColor = "rgba(255,255,255,0.25)";
-              e.currentTarget.style.color = "#F0EDE6";
-              e.currentTarget.style.transform = "translateY(-3px)";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.borderColor = "rgba(255,255,255,0.1)";
-              e.currentTarget.style.color = "rgba(240,237,230,0.5)";
-              e.currentTarget.style.transform = "translateY(0)";
-            }}
-          >
-            <Newspaper size={13} />
-            Media
           </button>
         </motion.div>
 

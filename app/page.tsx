@@ -27,8 +27,11 @@ export default function Home() {
     // Show preloader only once per browser session
     const seen = sessionStorage.getItem("hsk-preloader-seen");
     if (seen) {
-      setShowPreloader(false);
-      setSiteVisible(true);
+      const timer = setTimeout(() => {
+        setShowPreloader(false);
+        setSiteVisible(true);
+      }, 0);
+      return () => clearTimeout(timer);
     } else {
       sessionStorage.setItem("hsk-preloader-seen", "1");
     }

@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useEffect, useState } from "react";
-import { motion, useInView, useScroll, useTransform, AnimatePresence } from "framer-motion";
+import { motion, useInView, useScroll, useTransform } from "framer-motion";
 import Image from "next/image";
 
 const chapters = [
@@ -99,7 +99,7 @@ const chapters = [
 ];
 
 // Individual chapter — each one is a full-bleed cinematic card
-function Chapter({ chapter, index }: { chapter: typeof chapters[0]; index: number }) {
+function Chapter({ chapter }: { chapter: typeof chapters[0] }) {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-15% 0px" });
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
@@ -547,7 +547,8 @@ export default function Timeline() {
           borderBottom: "1px solid rgba(212,175,55,0.08)",
         }}
       >
-        {/* Header BG */}
+    
+        {/* Header BG
         <div style={{ position: "absolute", inset: 0, zIndex: 0 }}>
           <Image
             src="/images/harman-closeup.png"
@@ -560,7 +561,7 @@ export default function Timeline() {
             position: "absolute", inset: 0,
             background: "radial-gradient(ellipse at center, rgba(212,175,55,0.06) 0%, rgba(8,8,10,0.98) 70%)",
           }} />
-        </div>
+        </div> */}
 
         {/* Giant watermark text */}
         <div style={{
@@ -589,7 +590,7 @@ export default function Timeline() {
             transition={{ duration: 0.8 }}
             style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "1rem", marginBottom: "1.5rem" }}
           >
-            <div style={{ width: "3rem", height: "1px", background: "rgba(212,175,55,0.6)" }} />
+            <div style={{ width: "3rem", height: "1px", background: "rgba(212,175,55,0.6)" ,marginTop:"70px"}} />
             <span style={{
               fontFamily: "'Inter', sans-serif",
               fontSize: "0.65rem",
@@ -597,10 +598,11 @@ export default function Timeline() {
               letterSpacing: "0.3em",
               textTransform: "uppercase",
               color: "rgba(212,175,55,0.8)",
+              marginTop:"70px"
             }}>
               My Story · Seven Chapters
             </span>
-            <div style={{ width: "3rem", height: "1px", background: "rgba(212,175,55,0.6)" }} />
+            <div style={{ width: "3rem", height: "1px", background: "rgba(212,175,55,0.6)" ,marginTop:"70px"}} />
           </motion.div>
 
           <div style={{ overflow: "hidden" }}>
@@ -610,7 +612,7 @@ export default function Timeline() {
               transition={{ duration: 1, delay: 0.2, ease: [0.76, 0, 0.24, 1] }}
               style={{
                 fontFamily: "'Playfair Display', serif",
-                fontSize: "clamp(3rem, 7vw, 6rem)",
+                fontSize: "clamp(2rem, 4vw, 4rem)",
                 fontWeight: 900,
                 lineHeight: 1.05,
                 letterSpacing: "-0.04em",
@@ -628,7 +630,7 @@ export default function Timeline() {
               transition={{ duration: 1, delay: 0.35, ease: [0.76, 0, 0.24, 1] }}
               style={{
                 fontFamily: "'Playfair Display', serif",
-                fontSize: "clamp(3rem, 7vw, 6rem)",
+                fontSize: "clamp(2rem, 4vw, 4rem)",
                 fontWeight: 900,
                 lineHeight: 1.05,
                 letterSpacing: "-0.04em",
@@ -692,7 +694,7 @@ export default function Timeline() {
 
       {/* ── CHAPTER PANELS ── */}
       {chapters.map((chapter, i) => (
-        <Chapter key={i} chapter={chapter} index={i} />
+        <Chapter key={i} chapter={chapter} />
       ))}
 
       {/* ── CLOSING STATEMENT ── */}
