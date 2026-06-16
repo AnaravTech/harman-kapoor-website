@@ -2,7 +2,7 @@
 
 import { useRef, useState } from "react";
 import { motion, useInView } from "framer-motion";
-import { ExternalLink, FileText, Video, MessageSquare, Scale } from "lucide-react";
+import { ExternalLink, FileText, Video, MessageSquare } from "lucide-react";
 import { pressArticles } from "@/data/press";
 
 type Category = "all" | "article" | "video" | "statement";
