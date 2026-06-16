@@ -80,7 +80,7 @@ export default function About() {
               zIndex: 1,
             }}>
               <Image
-                src="/images/harman-closeup.png"
+                src="/images/about-harman.png"
                 alt="Harman Singh Kapoor — UK Entrepreneur & Public Speaker"
                 fill
                 sizes="(max-width: 768px) 100vw, 50vw"
@@ -220,15 +220,6 @@ export default function About() {
           </motion.div>
         </div>
       </div>
-
-      <style jsx>{`
-        @media (max-width: 768px) {
-          .grid-cols-about {
-            grid-template-columns: 1fr !important;
-            gap: 4rem !important;
-          }
-        }
-      `}</style>
     </section>
   );
 }

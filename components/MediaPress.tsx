@@ -169,13 +169,7 @@ export default function MediaPress() {
         </div>
       </div>
 
-      <style jsx>{`
-        @media (max-width: 640px) {
-          .press-featured-grid {
-            grid-template-columns: 1fr !important;
-          }
-        }
-      `}</style>
+
     </section>
   );
 }

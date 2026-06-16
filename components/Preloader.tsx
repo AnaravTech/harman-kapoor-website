@@ -250,8 +250,8 @@ export default function Preloader({ onComplete }: { onComplete: () => void }) {
             overflow: "hidden",
           }}
         >
-          {/* Particle canvas */}
-          <PreloaderCanvas />
+          {/* Particle canvas (sparkles) removed per user request */}
+          {/* <PreloaderCanvas /> */}
 
           {/* Center content */}
           <div style={{ position: "relative", zIndex: 2, textAlign: "center" }}>

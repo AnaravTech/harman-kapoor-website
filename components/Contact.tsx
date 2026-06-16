@@ -346,13 +346,7 @@ export default function Contact() {
         </motion.div>
       </div>
 
-      <style jsx>{`
-        @media (max-width: 640px) {
-          .form-grid {
-            grid-template-columns: 1fr !important;
-          }
-        }
-      `}</style>
+
     </section>
   );
 }

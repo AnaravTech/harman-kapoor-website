@@ -378,14 +378,7 @@ export default function Support() {
         </div>
       </div>
 
-      <style jsx>{`
-        @media (max-width: 768px) {
-          .support-grid {
-            grid-template-columns: 1fr !important;
-            gap: 2rem !important;
-          }
-        }
-      `}</style>
+
     </section>
   );
 }
