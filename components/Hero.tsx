@@ -6,7 +6,7 @@ import { ChevronDown, Play, Mic } from "lucide-react";
 import Image from "next/image";
 import dynamic from "next/dynamic";
 
-const ParticleCanvas = dynamic(() => import("./ParticleCanvas"), { ssr: false });
+
 
 // Images to cycle through in the background
 const heroImages = [
@@ -146,8 +146,7 @@ export default function Hero() {
         }} />
       </div>
 
-      {/* ── LAYER 2: Gold particle system ── */}
-      <ParticleCanvas />
+      {/* ── LAYER 2: Gold particle system (Removed) ── */}
 
       {/* ── LAYER 3: Cinematic letterbox bars ── */}
       <motion.div
@@ -224,7 +223,7 @@ export default function Hero() {
             transition: "transform 0.15s ease-out",
           }}>
             <Image
-              src="/images/harman-closeup.png"
+              src="/images/harman_singh.png"
               alt="Harman Singh Kapoor"
               fill
               sizes="(max-width: 900px) 0px, (max-width: 1200px) 35vw, 520px"
@@ -685,24 +684,7 @@ export default function Hero() {
         </div>
       </motion.div>
 
-      <style jsx>{`
-        @media (max-width: 900px) {
-          .hero-portrait-col {
-            display: none !important;
-          }
-          .hero-content {
-            padding-right: clamp(1.5rem, 5vw, 3rem) !important;
-            align-items: center;
-            text-align: center;
-          }
-          .hero-dots {
-            display: none !important;
-          }
-          .hero-location {
-            display: none !important;
-          }
-        }
-      `}</style>
+
     </section>
   );
 }
