@@ -591,12 +591,32 @@ h4, h5, h6 {
 }
 
 /* Hero Section */
-@media (max-width: 900px) {
+.hero-portrait-col {
+  right: clamp(2rem, 8vw, 12%);
+  bottom: 80px;
+  top: 80px;
+  width: clamp(280px, 35vw, 520px);
+}
+
+.hero-content {
+  padding-right: clamp(2rem, 42vw, 640px);
+  margin-top: 80px;
+}
+
+@media (max-width: 1280px) and (min-width: 1025px) {
+  .hero-portrait-col {
+    right: 5% !important;
+    width: clamp(240px, 28vw, 420px) !important;
+  }
+}
+
+@media (max-width: 1024px) {
   .hero-portrait-col {
     display: none !important;
   }
   .hero-content {
     padding-right: clamp(1.5rem, 5vw, 3rem) !important;
+    margin-top: 40px !important;
     align-items: center;
     text-align: center;
   }
@@ -608,23 +628,21 @@ h4, h5, h6 {
   }
 }
 
-/* Timeline Cards Container */
-.timeline-cards-container {
-  display: flex;
-  width: 100%;
-  gap: clamp(0.25rem, 1vw, 1.25rem);
-  padding-bottom: 2rem;
-  padding-top: 2rem;
-  position: relative;
+/* Timeline Vertical Parallax Styles */
+.chapter-grid {
+  display: grid;
+  grid-template-columns: 1fr 420px;
+  gap: 4rem;
+  align-items: center;
 }
-@media (max-width: 640px) {
-  .timeline-cards-container {
-    flex-direction: column !important;
-    align-items: center !important;
+
+@media (max-width: 900px) {
+  .chapter-grid {
+    grid-template-columns: 1fr !important;
+    gap: 2.5rem !important;
   }
-  .timeline-cards-container > div {
-    width: 100% !important;
-    max-width: 500px !important;
+  .chapter-rail {
+    display: none !important;
   }
 }
 

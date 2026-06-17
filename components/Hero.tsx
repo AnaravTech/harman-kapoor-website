@@ -2,9 +2,11 @@
 
 import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronDown, Play, Mic } from "lucide-react";
+import { ChevronDown, Play, Mic, Newspaper } from "lucide-react";
 import Image from "next/image";
 import dynamic from "next/dynamic";
+
+const ParticleCanvas = dynamic(() => import("./ParticleCanvas"), { ssr: false });
 
 
 
@@ -146,7 +148,8 @@ export default function Hero() {
         }} />
       </div>
 
-      {/* ── LAYER 2: Gold particle system (Removed) ── */}
+      {/* ── LAYER 2: Gold particle system ── */}
+      <ParticleCanvas />
 
       {/* ── LAYER 3: Cinematic letterbox bars ── */}
       <motion.div
@@ -155,7 +158,7 @@ export default function Hero() {
         transition={{ duration: 1.2, ease: [0.76, 0, 0.24, 1] }}
         style={{
           position: "absolute", top: 0, left: 0, right: 0,
-          height: "20px",
+          height: "80px",
           background: "rgba(8,8,10,0.9)",
           zIndex: 4,
           transformOrigin: "left",
@@ -197,10 +200,6 @@ export default function Hero() {
         transition={{ duration: 1.4, delay: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
         style={{
           position: "absolute",
-          right: "clamp(2rem, 8vw, 12%)",
-          bottom: "80px",
-          top: "80px",
-          width: "clamp(280px, 35vw, 520px)",
           zIndex: 5,
           display: "flex",
           alignItems: "flex-end",
@@ -331,8 +330,6 @@ export default function Hero() {
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
-        paddingRight: "clamp(2rem, 42vw, 640px)",
-        marginTop: "80px",
       }}
         className="hero-content"
       >
@@ -525,6 +522,43 @@ export default function Hero() {
           >
             <Mic size={13} />
             Latest Speeches
+          </button>
+
+          <button
+            id="hero-media"
+            onClick={() => document.querySelector("#press")?.scrollIntoView({ behavior: "smooth" })}
+            data-magnetic
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "0.6rem",
+              padding: "0.95rem 1.75rem",
+              background: "rgba(255,255,255,0.04)",
+              border: "1px solid rgba(255,255,255,0.1)",
+              borderRadius: "3px",
+              color: "rgba(240,237,230,0.5)",
+              fontFamily: "'Inter', sans-serif",
+              fontSize: "0.72rem",
+              fontWeight: 600,
+              letterSpacing: "0.12em",
+              textTransform: "uppercase",
+              cursor: "none",
+              transition: "all 0.3s ease",
+              backdropFilter: "blur(8px)",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.borderColor = "rgba(255,255,255,0.25)";
+              e.currentTarget.style.color = "#F0EDE6";
+              e.currentTarget.style.transform = "translateY(-3px)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.borderColor = "rgba(255,255,255,0.1)";
+              e.currentTarget.style.color = "rgba(240,237,230,0.5)";
+              e.currentTarget.style.transform = "translateY(0)";
+            }}
+          >
+            <Newspaper size={13} />
+            Media
           </button>
         </motion.div>
 

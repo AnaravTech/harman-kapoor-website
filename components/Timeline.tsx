@@ -1,487 +1,747 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { motion, useInView } from "framer-motion";
+import { useRef, useEffect, useState } from "react";
+import { motion, useInView, useScroll, useTransform, AnimatePresence } from "framer-motion";
 import Image from "next/image";
-import { 
-  Sprout, 
-  Building2, 
-  Mic, 
-  Users, 
-  Shield, 
-  Utensils, 
-  Compass,
-  ArrowRight
-} from "lucide-react";
 
-// Seven chapters with matching mockup contents
 const chapters = [
   {
-    id: "chapter-01",
     num: "01",
-    year: "2000",
-    title: "ROOTS & VALUES",
-    body: "The early years that shaped my foundation.",
+    year: "Early 2000s",
+    era: "Arrival",
+    title: "Arriving\nWith a Dream",
+    quote: "Some people arrive in a country. Others arrive with a mission.",
+    body: "Harman Singh Kapoor crossed continents carrying nothing but ambition, values, and an unshakeable belief that Britain was a land of genuine opportunity. Those early years were defined not by comfort, but by conviction.",
+    accentColor: "#C9A84C",
     image: "/images/journey-london.png",
-    icon: Sprout,
+    portrait: "/images/harman-london.png",
+    stat: { value: "1", label: "City. One Dream." },
+    align: "right" as const,
   },
   {
-    id: "chapter-02",
     num: "02",
-    year: "2005",
-    title: "BUILDING A VISION",
-    body: "Entrepreneurial beginnings and bold decisions.",
+    year: "2005–2010",
+    era: "First Steps",
+    title: "Building\na Foundation",
+    quote: "Every great building begins with a single brick placed in faith.",
+    body: "Through relentless effort and a deep understanding of two cultures, Harman established himself in London's hospitality industry. Every late night, every difficult decision was an investment — not just in a business, but in a community.",
+    accentColor: "#D4AF37",
     image: "/images/journey-restaurant.png",
-    icon: Building2,
+    portrait: "/images/harman-restaurant.png",
+    stat: { value: "5+", label: "Years of Groundwork" },
+    align: "left" as const,
   },
   {
-    id: "chapter-03",
     num: "03",
-    year: "2010",
-    title: "RAISING MY VOICE",
-    body: "Speaking up for fairness, freedom and values that matter.",
-    image: "/images/harman-speech.png",
-    icon: Mic,
+    year: "2012",
+    era: "Legacy",
+    title: "The Birth\nof Rangrez",
+    quote: "Rangrez means 'dyer of colours.' We gave London a new colour.",
+    body: "Rangrez opened its doors as a celebration of India's culinary heritage reimagined for a British audience. It quickly became not just a restaurant, but a community institution — a place where cultures met, conversations happened, and memories were made.",
+    accentColor: "#E8C96A",
+    image: "/images/journey-restaurant.png",
+    portrait: "/images/harman-hero.png",
+    stat: { value: "10K+", label: "Guests Served" },
+    align: "right" as const,
   },
   {
-    id: "chapter-04",
     num: "04",
-    year: "2015",
-    title: "SERVING COMMUNITY",
-    body: "Giving back and standing with those in need.",
-    image: "/images/gallery-community.png",
-    icon: Users,
+    year: "2015–2019",
+    era: "Growth",
+    title: "Expanding\nthe Voice",
+    quote: "A business is not just walls and a menu. It is a presence in a community.",
+    body: "As Rangrez flourished, Harman became more than a restaurateur. He became a connector — organising events, championing local causes, and demonstrating that entrepreneurial success and social responsibility are not opposites; they are partners.",
+    accentColor: "#D4AF37",
+    image: "/images/journey-london.png",
+    portrait: "/images/harman-speech.png",
+    stat: { value: "20+", label: "Community Events" },
+    align: "left" as const,
   },
   {
-    id: "chapter-05",
     num: "05",
-    year: "2015",
-    title: "CHALLENGES & CONTROVERSIES",
-    body: "The moments tested. The truth that endured.",
-    image: "/images/harman-closeup.png",
-    icon: Shield,
+    year: "2020–2022",
+    era: "Storm",
+    title: "Navigating\nthe Storm",
+    quote: "Character is not revealed in comfort. It is revealed in crisis.",
+    body: "Like every entrepreneur of courage, Harman faced his darkest chapters — business pressures, public controversies, personal struggles. Rather than retreating into silence, he chose something far harder: transparency, dignity, and the continued assertion of his rights under British law.",
+    accentColor: "#A07830",
+    image: "/images/journey-london.png",
+    portrait: "/images/harman-closeup.png",
+    stat: { value: "0", label: "Days of Silence" },
+    align: "right" as const,
   },
   {
-    id: "chapter-06",
     num: "06",
-    year: "2020",
-    title: "HOSPITALITY WITH PURPOSE",
-    body: "Food, culture and experiences that bring people together.",
-    image: "/images/harman-restaurant.png",
-    icon: Utensils,
+    year: "2023",
+    era: "Voice",
+    title: "Speaking\nPublicly",
+    quote: "My voice is not a weapon. It is a right — and I will use it.",
+    body: "Harman stepped into the public arena, delivering addresses about entrepreneurship, freedom of expression, and democratic values. His speeches resonated because they were not political performance — they were personal testimony.",
+    accentColor: "#D4AF37",
+    image: "/images/journey-london.png",
+    portrait: "/images/harman-speech.png",
+    stat: { value: "50+", label: "Public Speeches" },
+    align: "left" as const,
   },
   {
-    id: "chapter-07",
     num: "07",
-    year: "TODAY",
-    title: "THE ROAD AHEAD",
-    body: "Continuing the journey. Creating a better tomorrow.",
+    year: "2024–Present",
+    era: "Future",
+    title: "The Journey\nContinues",
+    quote: "The story is not finished. The best chapters are still being written.",
+    body: "Today, Harman Singh Kapoor stands at the intersection of business, civic life, and public discourse — committed to the belief that democratic engagement is not optional for those who care about justice. His journey is an invitation for others to find their own voice.",
+    accentColor: "#E8C96A",
     image: "/images/harman-hero.png",
-    icon: Compass,
+    portrait: "/images/harman-hero.png",
+    stat: { value: "∞", label: "Chapters Ahead" },
+    align: "right" as const,
   },
 ];
 
-/* ────────────────────────────────────────────────────────
-   Sub-component: Ambient Floating Gold Particles
-──────────────────────────────────────────────────────── */
-function BackgroundParticles() {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
-
-    let w = (canvas.width = window.innerWidth);
-    let h = (canvas.height = window.innerHeight);
-
-    const resize = () => {
-      if (!canvas) return;
-      w = canvas.width = window.innerWidth;
-      h = canvas.height = window.innerHeight;
-    };
-    window.addEventListener("resize", resize);
-
-    const particles: { x: number; y: number; r: number; speedY: number; speedX: number; opacity: number }[] = [];
-    for (let i = 0; i < 30; i++) {
-      particles.push({
-        x: Math.random() * w,
-        y: Math.random() * h,
-        r: Math.random() * 1.2 + 0.4,
-        speedY: -(Math.random() * 0.15 + 0.05),
-        speedX: (Math.random() - 0.5) * 0.05,
-        opacity: Math.random() * 0.25 + 0.05,
-      });
-    }
-
-    let rafId = 0;
-    const draw = () => {
-      ctx.clearRect(0, 0, w, h);
-      particles.forEach((p) => {
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(212, 175, 55, ${p.opacity})`;
-        ctx.fill();
-
-        p.y += p.speedY;
-        p.x += p.speedX;
-
-        if (p.y < 0) {
-          p.y = h;
-          p.x = Math.random() * w;
-        }
-      });
-      rafId = requestAnimationFrame(draw);
-    };
-
-    draw();
-    return () => {
-      cancelAnimationFrame(rafId);
-      window.removeEventListener("resize", resize);
-    };
-  }, []);
+// Individual chapter — each one is a full-bleed cinematic card
+function Chapter({ chapter, index }: { chapter: typeof chapters[0]; index: number }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { once: true, margin: "-15% 0px" });
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
+  const bgY = useTransform(scrollYProgress, [0, 1], ["0%", "20%"]);
+  const portraitY = useTransform(scrollYProgress, [0, 1], ["-4%", "4%"]);
+  const isRight = chapter.align === "right";
 
   return (
-    <canvas 
-      ref={canvasRef} 
-      style={{ 
-        position: "absolute", 
-        inset: 0, 
-        pointerEvents: "none", 
-        zIndex: 1,
-        opacity: 0.75
-      }} 
-    />
-  );
-}
+    <div
+      ref={ref}
+      style={{
+        position: "relative",
+        minHeight: "90vh",
+        display: "flex",
+        alignItems: "center",
+        overflow: "hidden",
+        borderBottom: "1px solid rgba(212,175,55,0.08)",
+      }}
+    >
+      {/* ── Parallax BG image ── */}
+      <motion.div
+        style={{ position: "absolute", inset: "-10%", y: bgY, zIndex: 0 }}
+      >
+        <Image
+          src={chapter.image}
+          alt=""
+          fill
+          sizes="100vw"
+          style={{
+            objectFit: "cover",
+            objectPosition: "center",
+            filter: "brightness(0.18) saturate(0.5)",
+          }}
+        />
+      </motion.div>
 
-/* ────────────────────────────────────────────────────────
-   Sub-component: Handwritten Manuscript Overlay
-──────────────────────────────────────────────────────── */
-function HandwrittenTexture() {
-  return (
-    <div style={{
-      position: "absolute",
-      inset: 0,
-      opacity: 0.015,
-      pointerEvents: "none",
-      zIndex: 1,
-      fontFamily: "'Playfair Display', Georgia, serif",
-      fontStyle: "italic",
-      color: "#D4AF37",
-      fontSize: "2.2rem",
-      lineHeight: 2.0,
-      padding: "6rem",
-      overflow: "hidden",
-      userSelect: "none"
-    }}>
+      {/* Gradient overlays */}
+      <div style={{
+        position: "absolute", inset: 0, zIndex: 1,
+        background: isRight
+          ? "linear-gradient(to right, rgba(8,8,10,0.97) 45%, rgba(8,8,10,0.4) 100%)"
+          : "linear-gradient(to left, rgba(8,8,10,0.97) 45%, rgba(8,8,10,0.4) 100%)",
+      }} />
+      <div style={{
+        position: "absolute", inset: 0, zIndex: 1,
+        background: "linear-gradient(to bottom, rgba(8,8,10,0.5) 0%, transparent 20%, transparent 80%, rgba(8,8,10,0.8) 100%)",
+      }} />
+
+      {/* Chapter number — giant watermark */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={inView ? { opacity: 1 } : {}}
+        transition={{ duration: 1.2, delay: 0.1 }}
+        style={{
+          position: "absolute",
+          [isRight ? "right" : "left"]: "-2rem",
+          bottom: "-3rem",
+          zIndex: 2,
+          fontFamily: "'Playfair Display', serif",
+          fontSize: "clamp(10rem, 22vw, 20rem)",
+          fontWeight: 900,
+          lineHeight: 1,
+          color: "transparent",
+          WebkitTextStroke: `1px rgba(212,175,55,0.08)`,
+          userSelect: "none",
+          pointerEvents: "none",
+          letterSpacing: "-0.05em",
+        }}
+      >
+        {chapter.num}
+      </motion.div>
+
+      {/* ── Main content grid ── */}
+      <div className="container-site" style={{ position: "relative", zIndex: 3, width: "100%", paddingTop: "5rem", paddingBottom: "5rem" }}>
+        <div style={{
+          display: "grid",
+          gridTemplateColumns: isRight ? "1fr 420px" : "420px 1fr",
+          gap: "4rem",
+          alignItems: "center",
+        }}
+          className="chapter-grid"
+        >
+          {/* Text block */}
+          <div style={{ order: isRight ? 1 : 2 }}>
+            {/* Chapter meta */}
+            <motion.div
+              initial={{ opacity: 0, x: isRight ? -30 : 30 }}
+              animate={inView ? { opacity: 1, x: 0 } : {}}
+              transition={{ duration: 0.7, delay: 0.2 }}
+              style={{ display: "flex", alignItems: "center", gap: "1rem", marginBottom: "1.75rem" }}
+            >
+              <div style={{
+                fontFamily: "'Inter', sans-serif",
+                fontSize: "0.6rem",
+                fontWeight: 800,
+                letterSpacing: "0.3em",
+                textTransform: "uppercase",
+                color: chapter.accentColor,
+                opacity: 0.8,
+              }}>
+                Chapter {chapter.num}
+              </div>
+              <div style={{ flex: 1, height: "1px", background: `linear-gradient(to right, ${chapter.accentColor}40, transparent)` }} />
+              <div style={{
+                fontFamily: "'Playfair Display', serif",
+                fontSize: "0.85rem",
+                fontWeight: 600,
+                color: chapter.accentColor,
+              }}>
+                {chapter.year}
+              </div>
+            </motion.div>
+
+            {/* Title — clip reveal */}
+            <div style={{ overflow: "hidden", marginBottom: "2rem" }}>
+              <motion.h2
+                initial={{ y: "110%" }}
+                animate={inView ? { y: 0 } : {}}
+                transition={{ duration: 0.9, delay: 0.35, ease: [0.76, 0, 0.24, 1] }}
+                style={{
+                  fontFamily: "'Playfair Display', serif",
+                  fontSize: "clamp(2.5rem, 5vw, 4.5rem)",
+                  fontWeight: 900,
+                  lineHeight: 1.05,
+                  letterSpacing: "-0.03em",
+                  color: "#F0EDE6",
+                  whiteSpace: "pre-line",
+                }}
+              >
+                {chapter.title}
+              </motion.h2>
+            </div>
+
+            {/* Quote — slide in */}
+            <motion.div
+              initial={{ opacity: 0, x: isRight ? -20 : 20 }}
+              animate={inView ? { opacity: 1, x: 0 } : {}}
+              transition={{ duration: 0.8, delay: 0.55 }}
+              style={{
+                borderLeft: `3px solid ${chapter.accentColor}`,
+                paddingLeft: "1.25rem",
+                marginBottom: "2rem",
+              }}
+            >
+              <p style={{
+                fontFamily: "'Playfair Display', serif",
+                fontSize: "clamp(1rem, 1.6vw, 1.2rem)",
+                fontStyle: "italic",
+                color: chapter.accentColor,
+                lineHeight: 1.65,
+              }}>
+                &ldquo;{chapter.quote}&rdquo;
+              </p>
+            </motion.div>
+
+            {/* Body copy */}
+            <motion.p
+              initial={{ opacity: 0, y: 15 }}
+              animate={inView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.8, delay: 0.7 }}
+              style={{
+                fontFamily: "'Inter', sans-serif",
+                fontSize: "clamp(0.875rem, 1.2vw, 1rem)",
+                color: "rgba(240,237,230,0.6)",
+                lineHeight: 1.9,
+                maxWidth: "520px",
+                marginBottom: "2.5rem",
+              }}
+            >
+              {chapter.body}
+            </motion.p>
+
+            {/* Stat callout */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={inView ? { opacity: 1, scale: 1 } : {}}
+              transition={{ duration: 0.7, delay: 0.85, type: "spring", stiffness: 120 }}
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "1.5rem",
+                padding: "1.25rem 1.75rem",
+                background: `linear-gradient(135deg, ${chapter.accentColor}12, ${chapter.accentColor}06)`,
+                border: `1px solid ${chapter.accentColor}30`,
+                borderRadius: "12px",
+              }}
+            >
+              <div>
+                <div style={{
+                  fontFamily: "'Playfair Display', serif",
+                  fontSize: "2.5rem",
+                  fontWeight: 900,
+                  lineHeight: 1,
+                  background: `linear-gradient(135deg, ${chapter.accentColor}, #F5E4A8)`,
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  backgroundClip: "text",
+                }}>
+                  {chapter.stat.value}
+                </div>
+                <div style={{
+                  fontFamily: "'Inter', sans-serif",
+                  fontSize: "0.65rem",
+                  fontWeight: 700,
+                  letterSpacing: "0.15em",
+                  textTransform: "uppercase",
+                  color: "rgba(240,237,230,0.4)",
+                  marginTop: "0.25rem",
+                }}>
+                  {chapter.stat.label}
+                </div>
+              </div>
+              <div style={{ width: "1px", height: "3rem", background: `${chapter.accentColor}30` }} />
+              <div style={{
+                fontFamily: "'Inter', sans-serif",
+                fontSize: "0.7rem",
+                fontWeight: 600,
+                letterSpacing: "0.12em",
+                textTransform: "uppercase",
+                color: `${chapter.accentColor}80`,
+              }}>
+                {chapter.era}
+              </div>
+            </motion.div>
+          </div>
+
+          {/* Portrait */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.92, x: isRight ? 40 : -40 }}
+            animate={inView ? { opacity: 1, scale: 1, x: 0 } : {}}
+            transition={{ duration: 1, delay: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
+            style={{
+              position: "relative",
+              order: isRight ? 2 : 1,
+            }}
+          >
+            {/* Portrait frame */}
+            <div style={{
+              position: "absolute",
+              top: "-1rem", [isRight ? "left" : "right"]: "-1rem",
+              bottom: "1rem", [isRight ? "right" : "left"]: "1rem",
+              border: `1px solid ${chapter.accentColor}20`,
+              borderRadius: "4px",
+              zIndex: 0,
+            }} />
+
+            <motion.div
+              style={{
+                position: "relative",
+                aspectRatio: "3/4",
+                borderRadius: "4px",
+                overflow: "hidden",
+                y: portraitY,
+              }}
+            >
+              <Image
+                src={chapter.portrait}
+                alt={`Harman Singh Kapoor — ${chapter.era}`}
+                fill
+                sizes="(max-width: 900px) 100vw, 420px"
+                style={{
+                  objectFit: "cover",
+                  objectPosition: "center top",
+                  filter: "contrast(1.05) saturate(0.9)",
+                }}
+              />
+              {/* Portrait overlays */}
+              <div style={{
+                position: "absolute", inset: 0,
+                background: `linear-gradient(to top, rgba(8,8,10,0.8) 0%, transparent 50%)`,
+              }} />
+
+              {/* Chapter era badge */}
+              <div style={{
+                position: "absolute",
+                top: "1.25rem",
+                [isRight ? "left" : "right"]: "1.25rem",
+                padding: "0.4rem 0.85rem",
+                background: "rgba(8,8,10,0.8)",
+                border: `1px solid ${chapter.accentColor}40`,
+                borderRadius: "4px",
+                backdropFilter: "blur(8px)",
+              }}>
+                <span style={{
+                  fontFamily: "'Inter', sans-serif",
+                  fontSize: "0.6rem",
+                  fontWeight: 800,
+                  letterSpacing: "0.18em",
+                  textTransform: "uppercase",
+                  color: chapter.accentColor,
+                }}>
+                  {chapter.year}
+                </span>
+              </div>
+
+              {/* Scanning line */}
+              <motion.div
+                animate={{ y: ["0%", "100%"] }}
+                transition={{ duration: 5, repeat: Infinity, ease: "linear", repeatDelay: 4 }}
+                style={{
+                  position: "absolute",
+                  left: 0, right: 0,
+                  height: "1px",
+                  background: `linear-gradient(90deg, transparent, ${chapter.accentColor}60, transparent)`,
+                  filter: "blur(1px)",
+                }}
+              />
+            </motion.div>
+          </motion.div>
+        </div>
+      </div>
+
+      {/* Progress indicator — right edge */}
+      <div style={{
+        position: "absolute",
+        right: "1.5rem",
+        bottom: "2rem",
+        display: "flex",
+        alignItems: "center",
+        gap: "0.5rem",
+        zIndex: 4,
+      }}>
+        <span style={{
+          fontFamily: "'Playfair Display', serif",
+          fontSize: "2rem",
+          fontWeight: 900,
+          color: "transparent",
+          WebkitTextStroke: `1px ${chapter.accentColor}40`,
+          lineHeight: 1,
+        }}>
+          {chapter.num}
+        </span>
+        <span style={{
+          fontFamily: "'Inter', sans-serif",
+          fontSize: "0.55rem",
+          fontWeight: 700,
+          letterSpacing: "0.2em",
+          textTransform: "uppercase",
+          color: `${chapter.accentColor}40`,
+        }}>
+          / 07
+        </span>
+      </div>
     </div>
   );
 }
 
 export default function Timeline() {
-  const [activeSection, setActiveSection] = useState("");
+  const sectionRef = useRef<HTMLElement>(null);
+  const headerRef = useRef<HTMLDivElement>(null);
+  const headerInView = useInView(headerRef, { once: true });
+  const { scrollYProgress } = useScroll({ target: sectionRef });
+  const [activeChapter, setActiveChapter] = useState(0);
+
+  // Track which chapter is in view via scroll position
+  useEffect(() => {
+    const onScroll = () => {
+      if (!sectionRef.current) return;
+      const rect = sectionRef.current.getBoundingClientRect();
+      const sectionH = sectionRef.current.scrollHeight - window.innerHeight;
+      const progress = Math.max(0, -rect.top) / sectionH;
+      setActiveChapter(Math.min(chapters.length - 1, Math.floor(progress * chapters.length)));
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  const progressHeight = useTransform(
+    scrollYProgress,
+    [0, 1],
+    ["0%", "100%"]
+  );
 
   return (
-    <section 
-      id="journey" 
-      style={{ 
-        background: "#08080A", 
-        position: "relative",
-        overflow: "hidden",
-        width: "100%",
-        display: "flex",
-        flexDirection: "column",
-        minHeight: "100vh"
-      }}
-    >
-      {/* ── UNIFIED BACKGROUND ── */}
-      <div style={{ position: "absolute", inset: 0, zIndex: 0 }}>
-        {/* Single Full Background */}
-        <Image
-          src="/images/harman-restaurant.png"
-          alt="Harman Singh Kapoor at Singh's Dining"
-          fill
-          sizes="100vw"
-          priority
-          style={{
-            objectFit: "cover",
-            objectPosition: "center top",
-            filter: "brightness(0.35) saturate(0.8)",
-          }}
-        />
-        {/* Gradients to darken edges and bottom */}
+    <section id="journey" ref={sectionRef} style={{ position: "relative", background: "var(--black)" }}>
+
+      {/* ── Sticky chapter progress rail (left edge) ── */}
+      <div style={{
+        position: "sticky",
+        top: 0,
+        height: 0,
+        zIndex: 20,
+        overflow: "visible",
+        pointerEvents: "none",
+      }}>
         <div style={{
           position: "absolute",
-          inset: 0,
-          background: "linear-gradient(to right, rgba(8,8,10,0.95) 0%, rgba(8,8,10,0.5) 40%, transparent 80%)",
-        }} />
-        <div style={{
-          position: "absolute",
-          inset: 0,
-          background: "linear-gradient(to bottom, transparent 40%, rgba(8,8,10,0.85) 75%, rgba(8,8,10,1) 100%)",
-        }} />
+          left: "clamp(0.5rem, 1.5vw, 2rem)",
+          top: "50vh",
+          transform: "translateY(-50%)",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          gap: "0.5rem",
+        }}
+          className="chapter-rail"
+        >
+          {/* Rail line */}
+          <div style={{
+            position: "absolute",
+            top: 0, bottom: 0,
+            width: "1px",
+            background: "rgba(212,175,55,0.12)",
+          }} />
+          {/* Active fill */}
+          <motion.div style={{
+            position: "absolute",
+            top: 0,
+            width: "1px",
+            background: "linear-gradient(to bottom, #C9A84C, #D4AF37)",
+            height: progressHeight,
+            boxShadow: "0 0 8px rgba(212,175,55,0.5)",
+          }} />
+          {/* Chapter dots */}
+          {chapters.map((ch, i) => (
+            <div
+              key={i}
+              style={{
+                width: "6px",
+                height: "6px",
+                borderRadius: "50%",
+                background: i === activeChapter ? "#D4AF37" : "rgba(212,175,55,0.2)",
+                border: i === activeChapter ? "2px solid #D4AF37" : "2px solid transparent",
+                boxShadow: i === activeChapter ? "0 0 12px rgba(212,175,55,0.8)" : "none",
+                transition: "all 0.4s ease",
+                position: "relative",
+                zIndex: 1,
+                flexShrink: 0,
+              }}
+            />
+          ))}
+        </div>
       </div>
 
-      <BackgroundParticles />
-      <HandwrittenTexture />
-
-      {/* ── SECTION 1: HERO STORY INTRO ── */}
-      <div 
+      {/* ── CINEMATIC SECTION HEADER ── */}
+      <div
+        ref={headerRef}
         style={{
           position: "relative",
-          zIndex: 5,
-          paddingTop: "clamp(3rem, 10vh, 15vh)",
-          paddingBottom: "clamp(0.5rem, 1vh, 2vh)",
+          minHeight: "55vh",
           display: "flex",
-          alignItems: "center"
+          alignItems: "center",
+          justifyContent: "center",
+          overflow: "hidden",
+          borderBottom: "1px solid rgba(212,175,55,0.08)",
         }}
       >
-        <div className="container-site" style={{ width: "100%" }}>
+        {/* Header BG */}
+        <div style={{ position: "absolute", inset: 0, zIndex: 0 }}>
+          <Image
+            src="/images/harman-closeup.png"
+            alt=""
+            fill
+            sizes="100vw"
+            style={{ objectFit: "cover", objectPosition: "center 20%", filter: "brightness(0.12) saturate(0.4)" }}
+          />
+          <div style={{
+            position: "absolute", inset: 0,
+            background: "radial-gradient(ellipse at center, rgba(212,175,55,0.06) 0%, rgba(8,8,10,0.98) 70%)",
+          }} />
+        </div>
+
+        {/* Giant watermark text */}
+        <div style={{
+          position: "absolute",
+          top: "50%", left: "50%",
+          transform: "translate(-50%, -50%)",
+          fontFamily: "'Playfair Display', serif",
+          fontSize: "clamp(8rem, 20vw, 18rem)",
+          fontWeight: 900,
+          lineHeight: 1,
+          color: "transparent",
+          WebkitTextStroke: "1px rgba(212,175,55,0.05)",
+          whiteSpace: "nowrap",
+          userSelect: "none",
+          pointerEvents: "none",
+          zIndex: 1,
+        }}>
+          JOURNEY
+        </div>
+
+        {/* Header content */}
+        <div style={{ position: "relative", zIndex: 2, textAlign: "center", padding: "0 2rem" }}>
           <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 1, ease: "easeOut" }}
-            style={{ maxWidth: "550px" }}
+            initial={{ opacity: 0, y: -20 }}
+            animate={headerInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.8 }}
+            style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "1rem", marginBottom: "1.5rem" }}
           >
-            <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "1.5rem" }}>
-              <div style={{ width: "30px", height: "1px", background: "#D4AF37" }} />
-              <span style={{
-                fontFamily: "'Inter', sans-serif",
-                fontSize: "0.75rem",
-                fontWeight: 600,
-                letterSpacing: "0.2em",
-                textTransform: "uppercase",
-                color: "#C9A84C",
-              }}>
-                MY STORY • SEVEN CHAPTERS
-              </span>
-            </div>
-
-            <h1 style={{
-              fontFamily: "'Playfair Display', serif",
-              fontSize: "clamp(3rem, 6vw, 5rem)",
-              fontWeight: 800,
-              lineHeight: 1.00,
-              color: "#F0EDE6",
-              marginBottom: "1.5rem",
-              letterSpacing: "-0.01em"
-            }}>
-              A Life <br/>
-              Written in <br/>
-              <span style={{ color: "#D4AF37", fontStyle: "italic", fontWeight: 700 }}>
-                Courage &amp; Colour.
-              </span>
-            </h1>
-
-            <p style={{
+            <div style={{ width: "3rem", height: "1px", background: "rgba(212,175,55,0.6)" }} />
+            <span style={{
               fontFamily: "'Inter', sans-serif",
-              fontSize: "0.95rem",
-              fontWeight: 300,
-              color: "rgba(240,237,230,0.7)",
-              lineHeight: 1.7,
-              maxWidth: "450px"
+              fontSize: "0.65rem",
+              fontWeight: 800,
+              letterSpacing: "0.3em",
+              textTransform: "uppercase",
+              color: "rgba(212,175,55,0.8)",
             }}>
-              Every headline has a history. Every controversy has a context. <br/>
-              Scroll to experience the unabridged journey — chapter by chapter.
-            </p>
+              My Story · Seven Chapters
+            </span>
+            <div style={{ width: "3rem", height: "1px", background: "rgba(212,175,55,0.6)" }} />
+          </motion.div>
+
+          <div style={{ overflow: "hidden" }}>
+            <motion.h2
+              initial={{ y: "110%" }}
+              animate={headerInView ? { y: 0 } : {}}
+              transition={{ duration: 1, delay: 0.2, ease: [0.76, 0, 0.24, 1] }}
+              style={{
+                fontFamily: "'Playfair Display', serif",
+                fontSize: "clamp(3rem, 7vw, 6rem)",
+                fontWeight: 900,
+                lineHeight: 1.05,
+                letterSpacing: "-0.04em",
+                color: "#F0EDE6",
+                marginBottom: "0.2rem",
+              }}
+            >
+              A Life Written in
+            </motion.h2>
+          </div>
+          <div style={{ overflow: "hidden" }}>
+            <motion.h2
+              initial={{ y: "110%" }}
+              animate={headerInView ? { y: 0 } : {}}
+              transition={{ duration: 1, delay: 0.35, ease: [0.76, 0, 0.24, 1] }}
+              style={{
+                fontFamily: "'Playfair Display', serif",
+                fontSize: "clamp(3rem, 7vw, 6rem)",
+                fontWeight: 900,
+                lineHeight: 1.05,
+                letterSpacing: "-0.04em",
+                fontStyle: "italic",
+                background: "linear-gradient(135deg, #C9A84C 0%, #F5E4A8 45%, #D4AF37 100%)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                backgroundClip: "text",
+              }}
+            >
+              Courage &amp; Colour.
+            </motion.h2>
+          </div>
+
+          <motion.p
+            initial={{ opacity: 0, y: 15 }}
+            animate={headerInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.8, delay: 0.6 }}
+            style={{
+              fontFamily: "'Inter', sans-serif",
+              fontSize: "clamp(0.875rem, 1.3vw, 1.05rem)",
+              color: "rgba(240,237,230,0.5)",
+              maxWidth: "520px",
+              margin: "1.5rem auto 2.5rem",
+              lineHeight: 1.85,
+            }}
+          >
+            Every headline has a history. Every controversy has a context. Scroll to experience the unabridged journey — chapter by chapter.
+          </motion.p>
+
+          {/* Scroll cue */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={headerInView ? { opacity: 1 } : {}}
+            transition={{ delay: 1, duration: 0.8 }}
+            style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "0.5rem" }}
+          >
+            <span style={{
+              fontFamily: "'Inter', sans-serif",
+              fontSize: "0.6rem",
+              fontWeight: 700,
+              letterSpacing: "0.2em",
+              textTransform: "uppercase",
+              color: "rgba(212,175,55,0.4)",
+            }}>
+              Scroll to read
+            </span>
+            <motion.div
+              animate={{ y: [0, 8, 0] }}
+              transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
+            >
+              <div style={{
+                width: "1px",
+                height: "3rem",
+                background: "linear-gradient(to bottom, rgba(212,175,55,0.6), transparent)",
+              }} />
+            </motion.div>
           </motion.div>
         </div>
       </div>
 
-      {/* ── SECTION 2 & 3: TIMELINE & CARDS ── */}
-      <div className="container-site" style={{ position: "relative", zIndex: 5, paddingBottom: "clamp(0.5rem, 1vh, 2rem)", flex: 1, display: "flex", flexDirection: "column", justifyContent: "flex-end" }}>
-          
-          <div className="timeline-cards-container">
-            {/* Continuous Background Timeline Line */}
-            <div style={{
-              position: "absolute",
-              top: "calc(2rem + 4px)", // 2rem padding + 4px to center in 10px dot
-              left: 0,
-              right: 0,
-              height: "1px",
-              background: "rgba(212,175,55,0.25)",
-              zIndex: 0
-            }} />
-            
-            {/* Arrow at end of line */}
-            <div style={{
-              position: "absolute",
-              top: "calc(2rem - 2px)",
-              right: "-5px",
-              color: "rgba(212,175,55,0.5)"
-            }}>
-               <ArrowRight size={14} />
-            </div>
+      {/* ── CHAPTER PANELS ── */}
+      {chapters.map((chapter, i) => (
+        <Chapter key={i} chapter={chapter} index={i} />
+      ))}
 
-            {chapters.map((ch, idx) => (
-              <div key={ch.num} style={{ flex: "1 1 0", minWidth: 0, position: "relative", display: "flex", flexDirection: "column", alignItems: "center" }}>
-                
-                {/* Timeline Node & Year */}
-                <div style={{ height: "4.5rem", display: "flex", flexDirection: "column", alignItems: "center", position: "relative", zIndex: 1 }}>
-                  {/* Dot */}
-                  <div style={{
-                    width: "10px",
-                    height: "10px",
-                    borderRadius: "50%",
-                    background: "#D4AF37",
-                    boxShadow: "0 0 10px rgba(212,175,55,0.6)",
-                  }} />
-                  {/* Year */}
-                  <span style={{
-                    fontFamily: "'Inter', sans-serif",
-                    fontSize: "0.75rem",
-                    fontWeight: 600,
-                    color: "#C9A84C",
-                    marginTop: "1.2rem",
-                    letterSpacing: "0.05em"
-                  }}>
-                    {ch.year}
-                  </span>
-                </div>
-
-                {/* The Card */}
-                <ChapterCard chapter={ch} onInView={(id) => setActiveSection(id)} />
-              </div>
-            ))}
-          </div>
-
-        {/* Scroll to Read Indicator
-        <div style={{ textAlign: "center", marginTop: "1rem" }}>
-          <span style={{
-            fontFamily: "'Inter', sans-serif",
-            fontSize: "0.6rem",
-            letterSpacing: "0.3em",
-            color: "rgba(201,168,76,0.6)",
-            textTransform: "uppercase"
-          }}>
-            SCROLL TO READ
-          </span>
-          <div style={{ width: "1px", height: "20px", background: "rgba(201,168,76,0.3)", margin: "0.5rem auto 0" }} />
-        </div> */}
-      </div>
-
-
-    </section>
-  );
-}
-
-/* ────────────────────────────────────────────────────────
-   Sub-component: Glassmorphic Chapter Card
-──────────────────────────────────────────────────────── */
-interface ChapterCardProps {
-  chapter: typeof chapters[0];
-  onInView: (id: string) => void;
-}
-
-function ChapterCard({ chapter, onInView }: ChapterCardProps) {
-  const cardRef = useRef<HTMLDivElement>(null);
-  const inView = useInView(cardRef, { margin: "-25% 0px -25% 0px" });
-  const Icon = chapter.icon;
-  const [isHovered, setIsHovered] = useState(false);
-
-  useEffect(() => {
-    if (inView) {
-      onInView(chapter.id);
-    }
-  }, [inView, chapter.id, onInView]);
-
-  return (
-    <motion.div
-      ref={cardRef}
-      id={chapter.id}
-      whileHover={{ y: -6 }}
-      onHoverStart={() => setIsHovered(true)}
-      onHoverEnd={() => setIsHovered(false)}
-      transition={{ duration: 0.3, ease: "easeOut" }}
-      style={{
-        width: "100%",
-        height: "clamp(250px, 35vh, 320px)",
-        borderRadius: "4px",
-        border: `1px solid ${isHovered ? 'rgba(212, 175, 55, 0.4)' : 'rgba(212,175,55,0.15)'}`,
-        background: "linear-gradient(to bottom, rgba(13,13,15,0.8), rgba(8,8,10,0.95))",
-        padding: "clamp(1rem, 2vh, 1.5rem) clamp(0.75rem, 1vw, 1.25rem)",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        textAlign: "center",
-        overflow: "hidden",
+      {/* ── CLOSING STATEMENT ── */}
+      <div style={{
         position: "relative",
-        cursor: "pointer",
-        boxShadow: "0 10px 20px rgba(0,0,0,0.5)",
-      }}
-    >
-      {/* Background Image Overlay */}
-      <div 
-        style={{
-          position: "absolute",
-          inset: 0,
-          backgroundImage: `url(${chapter.image})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          opacity: isHovered ? 0.15 : 0.08,
-          mixBlendMode: "luminosity",
-          zIndex: 0,
-          transform: isHovered ? 'scale(1.05)' : 'scale(1)',
-          transition: "opacity 0.4s ease, transform 0.6s ease",
-        }} 
-      />
-
-      <div style={{ position: "relative", zIndex: 2, flex: 1, display: "flex", flexDirection: "column", alignItems: "center" }}>
-        {/* Chapter Number Badge */}
-        <span style={{
-          fontFamily: "'Playfair Display', serif",
-          fontSize: "2.25rem",
-          fontWeight: 400,
-          color: "#D4AF37",
-          lineHeight: 1,
-          marginBottom: "1.25rem",
-        }}>
-          {chapter.num}
-        </span>
-
-        {/* Title */}
-        <h3 style={{
-          fontFamily: "'Playfair Display', serif",
-          fontSize: "0.95rem",
-          fontWeight: 700,
-          letterSpacing: "0.05em",
-          color: "#F0EDE6",
-          marginBottom: "0.75rem",
-          lineHeight: 1.3
-        }}>
-          {chapter.title}
-        </h3>
-
-        {/* Description Body */}
-        <p style={{
-          fontFamily: "'Inter', sans-serif",
-          fontSize: "0.75rem",
-          color: "rgba(240,237,230,0.6)",
-          lineHeight: 1.5,
-          fontWeight: 300,
-        }}>
-          {chapter.body}
-        </p>
-      </div>
-
-      {/* Gold Icon */}
-      <div style={{ position: "relative", zIndex: 2, marginTop: "auto", paddingTop: "1rem" }}>
+        padding: "6rem 0",
+        background: "var(--dark-1)",
+        borderTop: "1px solid rgba(212,175,55,0.1)",
+        overflow: "hidden",
+      }}>
         <div style={{
-          width: "36px",
-          height: "36px",
-          borderRadius: "50%",
-          border: "1px solid rgba(212,175,55,0.4)",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          color: "#D4AF37",
-          background: "rgba(8,8,10,0.8)",
-        }}>
-          <Icon size={16} />
+          position: "absolute",
+          top: "50%", left: "50%",
+          transform: "translate(-50%, -50%)",
+          width: "600px", height: "300px",
+          background: "radial-gradient(ellipse, rgba(212,175,55,0.06) 0%, transparent 70%)",
+          pointerEvents: "none",
+        }} />
+        <div className="container-site" style={{ textAlign: "center", position: "relative" }}>
+          <p style={{
+            fontFamily: "'Playfair Display', serif",
+            fontSize: "clamp(1.2rem, 2.5vw, 1.75rem)",
+            fontStyle: "italic",
+            color: "rgba(240,237,230,0.7)",
+            maxWidth: "680px",
+            margin: "0 auto 1.5rem",
+            lineHeight: 1.7,
+          }}>
+            &ldquo;The most important chapter in any story is the one the world tried to prevent you from writing.&rdquo;
+          </p>
+          <div style={{
+            fontFamily: "'Inter', sans-serif",
+            fontSize: "0.7rem",
+            fontWeight: 700,
+            letterSpacing: "0.2em",
+            textTransform: "uppercase",
+            color: "#C9A84C",
+          }}>
+            — Harman Singh Kapoor
+          </div>
+          <div style={{
+            width: "3rem",
+            height: "1px",
+            background: "linear-gradient(90deg, transparent, #D4AF37, transparent)",
+            margin: "2rem auto 0",
+          }} />
         </div>
       </div>
-    </motion.div>
+
+    </section>
   );
 }
