@@ -16,7 +16,7 @@ export default function Speeches() {
       id="speeches"
       style={{
         background: "var(--dark-1)",
-        padding: "7rem 0",
+        padding: "3rem 0 7rem 0",
         position: "relative",
         overflow: "hidden",
       }}
@@ -27,7 +27,7 @@ export default function Speeches() {
           initial={{ opacity: 0, y: 30 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8 }}
-          style={{ textAlign: "center", marginBottom: "4rem" }}
+          style={{ textAlign: "center", marginBottom: "3rem" }}
         >
           <span className="label-overline">Public Voice</span>
           <div className="divider-gold" />
@@ -47,11 +47,7 @@ export default function Speeches() {
         </motion.div>
 
         {/* Video Grid */}
-        <div style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
-          gap: "1.75rem",
-        }}>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
           {speeches.map((speech, i) => (
             <motion.div
               key={speech.id}

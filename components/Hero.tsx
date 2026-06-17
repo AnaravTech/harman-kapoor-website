@@ -84,7 +84,7 @@ export default function Hero() {
       style={{
         position: "relative",
         height: "100vh",
-        minHeight: "700px",
+        minHeight: "100vh",
         overflow: "hidden",
         display: "flex",
         alignItems: "center",
@@ -112,9 +112,9 @@ export default function Hero() {
               priority={i === 0}
               quality={90}
               style={{
-                objectFit: "contain",
-                objectPosition: "center top",
-                transform: `scale(1.08) translate(${parallaxX * -0.3}px, ${(parallaxY * -0.3) + scrollY * -0.2}px)`,
+                objectFit: "cover",
+                objectPosition: "center 15%",
+                transform: `scale(1.25) translate(${parallaxX * -0.3}px, ${(parallaxY * -0.3) + scrollY * -0.2}px)`,
                 transition: "transform 0.1s linear",
                 filter: "brightness(0.45) saturate(0.8)",
               }}
@@ -155,7 +155,7 @@ export default function Hero() {
         transition={{ duration: 1.2, ease: [0.76, 0, 0.24, 1] }}
         style={{
           position: "absolute", top: 0, left: 0, right: 0,
-          height: "80px",
+          height: "20px",
           background: "rgba(8,8,10,0.9)",
           zIndex: 4,
           transformOrigin: "left",

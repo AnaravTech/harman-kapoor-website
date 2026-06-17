@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import MagneticCursor from "@/components/MagneticCursor";
+import SparkleCursor from "@/components/SparkleCursor";
 
 export const metadata: Metadata = {
   title: "Harman Singh Kapoor | UK Entrepreneur, Restaurateur & Public Speaker",
@@ -51,6 +52,7 @@ export default function RootLayout({
 
       <body className="antialiased" style={{ cursor: "none" }}>
         <MagneticCursor />
+        <SparkleCursor />
         {children}
       </body>
     </html>

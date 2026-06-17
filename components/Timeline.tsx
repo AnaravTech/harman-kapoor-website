@@ -176,11 +176,6 @@ function HandwrittenTexture() {
       overflow: "hidden",
       userSelect: "none"
     }}>
-      <div style={{ transform: "rotate(-6deg) scale(1.02)", transformOrigin: "top left" }}>
-        <p>A life of conviction, entrepreneurship and public service...</p>
-        <p style={{ textIndent: "5rem" }}>standing up for democratic values in Westminster and beyond.</p>
-        <p>Serving the community, building Rangrez, speaking for freedom...</p>
-      </div>
     </div>
   );
 }
@@ -268,7 +263,7 @@ export default function Timeline() {
               fontFamily: "'Playfair Display', serif",
               fontSize: "clamp(3rem, 6vw, 5rem)",
               fontWeight: 800,
-              lineHeight: 1.05,
+              lineHeight: 1.00,
               color: "#F0EDE6",
               marginBottom: "1.5rem",
               letterSpacing: "-0.01em"
@@ -352,7 +347,7 @@ export default function Timeline() {
             ))}
           </div>
 
-        {/* Scroll to Read Indicator */}
+        {/* Scroll to Read Indicator
         <div style={{ textAlign: "center", marginTop: "1rem" }}>
           <span style={{
             fontFamily: "'Inter', sans-serif",
@@ -364,7 +359,7 @@ export default function Timeline() {
             SCROLL TO READ
           </span>
           <div style={{ width: "1px", height: "20px", background: "rgba(201,168,76,0.3)", margin: "0.5rem auto 0" }} />
-        </div>
+        </div> */}
       </div>
 
 
